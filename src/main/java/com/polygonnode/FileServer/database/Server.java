@@ -11,17 +11,18 @@ import com.sun.net.httpserver.HttpServer;
 @SuppressWarnings("restriction")
 public class Server {
 	
-	private static DB database;
+	private static Database database;
 	HttpServer server;
 	
 	
-	public Server(DB database) throws IOException {
+	public Server(Database database) throws IOException {
 		Server.database = database;
 		server = HttpServer.create(new InetSocketAddress(8000), 0);
         server.createContext("/test", new MyHandler());
         server.createContext("/size", new sizeHandler());
         server.createContext("/get", new getHandler());
         server.createContext("/exists", new existsHandler());
+        server.createContext("/delete", new deleteHandler());
         server.createContext("/insert", new insertHandler());
         server.setExecutor(null); // creates a default executor
         server.start();
@@ -50,6 +51,25 @@ public class Server {
 	 */
 	
 	static class existsHandler implements HttpHandler {
+		public void handle(HttpExchange t) throws IOException {
+        	String uri = t.getRequestURI().toString();
+        	uri = uri.substring(8, uri.length());
+        	boolean exists = database.exists(uri);
+        	String response = "1";
+            if(!exists) {
+            	response = "0";
+            }
+            t.sendResponseHeaders(200, response.length());
+            OutputStream os = t.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        }
+	}
+	/*
+	 * Method for seeing in an objects exists in the database, 1 means it exists,0 means it does not
+	 */
+	
+	static class deleteHandler implements HttpHandler {
 		public void handle(HttpExchange t) throws IOException {
         	String uri = t.getRequestURI().toString();
         	uri = uri.substring(8, uri.length());

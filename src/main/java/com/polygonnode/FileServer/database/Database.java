@@ -2,11 +2,11 @@ package com.polygonnode.FileServer.database;
 
 import com.polygonnode.database.trie.Trie;
 
-public class DB {
+public class Database {
 	private Trie data;
 	private int numberOfObjects;
 
-	public DB() {
+	public Database() {
 		this.data = new Trie();
 		this.numberOfObjects = 0;
 	}
