@@ -1,5 +1,5 @@
 # com.polygonnode.FileServer
-This Project is a key-Value database with the intention of quickly streaming small (16kb or less) files to what ever server requested them. The aim is to use this modlue is to use it in a nanoservices architecture. 
+This Project is a key-Value database with the intention of quickly streaming small (16kb or less) files to what ever server requested them. The aim is to use this module is to use it in a nanoservices architecture. 
 
 **Working Routes**
 - /get/ (give it a key and it will return the file)
@@ -11,5 +11,5 @@ This Project is a key-Value database with the intention of quickly streaming sma
 - /delete/ (route that delete file associated with key)
 
 **Features to Impliments**
-- better file saving and loading (org.apatche.io)
+- better file saving and loading (org.apache.io)
 - returning of file in bytes for direct streaminging into container
