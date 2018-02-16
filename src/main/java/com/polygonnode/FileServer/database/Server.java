@@ -3,6 +3,8 @@ package com.polygonnode.FileServer.database;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -24,6 +26,7 @@ public class Server {
         server.createContext("/exists", new existsHandler());
         server.createContext("/delete", new deleteHandler());
         server.createContext("/insert", new insertHandler());
+        server.createContext("/batchget", new batchGetHandler());
         server.setExecutor(null); // creates a default executor
         server.start();
 	}
@@ -46,6 +49,33 @@ public class Server {
             os.close();
         }
 	}
+	/*
+	 * use the batch get to get multiple values by seperating thier key values by ","
+	 */
+	static class batchGetHandler implements HttpHandler {
+        
+        public void handle(HttpExchange t) throws IOException {
+            String response = "{";
+            String uri = t.getRequestURI().toString();
+        	uri = uri.substring(10, uri.length());
+        	String[] uriArray = uri.split(",");
+        	Map<String,String> responseMap = new HashMap<String,String>();
+        	for(String key: uriArray) {
+        		String getResult = database.get(key);
+        		if(getResult != null) {
+        			response = response + "\'"+key+"\':\'" + getResult + "\',";
+        		}else {
+        			response = response + "\'"+key+"\':\'\',";
+        		}
+        		
+        	}
+        	response = response.substring(0, response.length()-1) + "}";
+            t.sendResponseHeaders(200, response.length());
+            OutputStream os = t.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        }
+    }
 	/*
 	 * Method for seeing in an objects exists in the database, 1 means it exists,0 means it does not
 	 */
@@ -90,7 +120,17 @@ public class Server {
 	static class insertHandler implements HttpHandler {
         
         public void handle(HttpExchange t) throws IOException {
-            String response = "Not supported yet";
+        	String response = "Error inserting into Database";
+        	
+        	String uri = t.getRequestURI().toString();
+        	uri = uri.substring(8, uri.length());
+        	String[] uriArray = uri.split("/");
+        	
+        	if(database.insert(uriArray[0], uriArray[1])) {
+        		response = "Insert Successful";
+        	}
+        	
+            
             t.sendResponseHeaders(200, response.length());
             OutputStream os = t.getResponseBody();
             os.write(response.getBytes());

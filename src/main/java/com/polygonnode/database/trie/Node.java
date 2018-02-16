@@ -9,6 +9,7 @@ public class Node {
 	private String file; //if null then no file exists
 	
 	
+	
 	public Node() { //make a new blank node
 		this.data = new HashMap(); 
 		this.file = null; //a node is made without a file
@@ -20,12 +21,10 @@ public class Node {
 	}
 	public boolean insert(char[] key,String file) {
 		if(key.length == 0) { // end of the key so put file here
-			if(this.file == null) { // if there is no file
-				this.file = storeFile(file);
-				return true;
-			}else{
-				return false; // file exists
-			}
+			
+			this.file = file;
+			return true;
+			
 		}
 		if(data.containsKey(key[0])) { // if the first key in the string exists then
 			return data.get(key[0]).insert(Arrays.copyOfRange(key,1,key.length), file); // call inset with a smaller length
@@ -41,7 +40,7 @@ public class Node {
 	public String find(char[] key) {
 		if(key.length == 0) {// if we are a the end of the key see if a file exists
 			if(this.file != null) {
-			return loadFile(this.file);
+			return this.file;
 			}else {
 				return null;
 			}
