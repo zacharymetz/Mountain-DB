@@ -1,15 +1,15 @@
 # Mountain DB
-This Project is a key-Value database with the intention of quickly streaming json objects to what ever server requested them. The aim is to use this database where a fast nosql solution is needed 
+This Project is a key-Value database with the intention of quickly streaming json objects to what ever server requested them. The aim is to use this database where a fast and simple nosql solution is needed
 
 **Working Routes**
-- /get/ (give it a key and it will return the file)
-- /batchget/ (gets a list of values)
-- /exists/ (returns 1 if key exists, 0 if it does not)
+- /get/key (give it a key and it will return the file)
+- /batchget/key1,key2,ke3 (gets a list of values)
+- /exists/key (returns 1 if key exists, 0 if it does not)
 - /size (returns how many files are in the database
-- /insert/ (post route that contains file in either string or bytes)
+- /insert/key/value (stores value at key in the database)
 
 **Routes To Impliment**
-- /delete/ (route that delete file associated with key)
+- /delete/key (route that delete file associated with key)
 - /dumpKeys/ (gets a list of all the keys in the db)
 
 **Features to Impliments**
